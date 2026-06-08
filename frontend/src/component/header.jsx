@@ -4,16 +4,21 @@ import { useDispatch } from "react-redux"
 import { logout } from "../store/autoslice/auto"
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function Header(){
     const dispatch=useDispatch()
     const Navigate=useNavigate()
     const token =useSelector((state)=>state.auto.token)
+    const [message,setmessage]=useState()
 
-   function HandleLogout(){
-    dispatch(logout());
-    localStorage.removeItem("token");
-    localStorage.removeItem(`cart_${token}`)
+ async function HandleLogout(){
+     const res= await fetch("http://localhost:3000/api/auth/logout",{
+        credentials:'include'
+     })
+     const data=await res.json()
+     setmessage(data.message)
+    dispatch(logout(data.token))
      Navigate('/login')
 
    }
