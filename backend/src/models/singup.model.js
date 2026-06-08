@@ -13,7 +13,8 @@ const singupschema=new mongoose.Schema({
     password:{
         type:String,
         minlength:[8,"length must atleast 8 characters"],
-        required:true
+        required:true,
+        select:false
     }
 })
 singupschema.virtual("confirmPassword")
@@ -30,5 +31,8 @@ singupschema.pre("save",async function () {
     hash=await bcrypt.hash(this.password,10)
     this.password=hash
 })
+singupschema.methods.compare=async function (password) {
+     return await bcrypt.compare(password,this.password)    
+}
 const singupmodel=mongoose.model("singups",singupschema)
 module.exports=singupmodel;
