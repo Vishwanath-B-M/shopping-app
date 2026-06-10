@@ -58,7 +58,7 @@ export default function Login(){
         })
             })
             const data=await res.json()
-            if(data.status===201){
+            if(res.status===201){
                 setmessage(data.message)
                 dispatch(loginSuceess(data.token))
                 setemail("")

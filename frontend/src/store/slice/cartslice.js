@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const token=localStorage.getItem("token")
+const token=cookieStore.get("token")
 
 
 const initialState={
-    cart:JSON.parse(localStorage.getItem(`cart_${token}`))||[],
+    cart:JSON.parse(await cookieStore.get(`cart_${token}`))||[],
    
     
 }
@@ -14,7 +14,7 @@ const cartSlice=createSlice({
     reducers :{
         addTocart(state,action){
             state.cart.push(action.payload)
-           const token=localStorage.getItem("token")
+           const token=cookieStore.get("token")
            if(token){
             localStorage.setItem(`cart_${token}`,JSON.stringify(state.cart))
            }
@@ -22,8 +22,8 @@ const cartSlice=createSlice({
         ,
         removeFromcart(state,action){
            state.cart=state.cart.filter(item=>item.id!==action.payload)
-           const token=localStorage.getItem("token")
-           localStorage.setItem(`cart_${token}`,JSON.stringify(state.cart))
+           const token=cookieStore.get("token")
+           cookieStore.set(`cart_${token}`,JSON.stringify(state.cart))
 
         },
 

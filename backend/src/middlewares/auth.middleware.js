@@ -1,6 +1,6 @@
 const jwt=require("jsonwebtoken")
 
-async function userCheck(req,res) {
+async function userCheck(req,res,next) {
     const token=req.cookies.token
     if(token){
         return res.status(200).json({

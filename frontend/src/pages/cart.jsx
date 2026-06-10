@@ -10,6 +10,22 @@ export default function Cart(){
     },[cart])
     console.log(cart)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
     return(< div className="min-h-screen bg-gradient-to-r from-blue-300 to-purple-300">
     <div  className='flex flex-col items-center justify-center ' >
         {cart&&cart.length?(<div className='min-h-screen flex flex-col items-center justify-center'>

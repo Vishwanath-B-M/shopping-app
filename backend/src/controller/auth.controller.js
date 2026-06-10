@@ -20,15 +20,16 @@ async function singup(req,res) {
      res.cookie("token",token)
     res.status(201).json({
         message:"singup succefully",
-        token,
+        token:token,
         user:{
             email:user.email,
+            userID:user._id
 
         }
     })
     if(!token){
         return res.status(200).json({
-            message:"password is not matching"
+            message:"you need to singup or login"
 
 
         })
@@ -65,6 +66,7 @@ async function login(req,res) {
         token,
         user:{
             email:useristhere.email,
+            userID:user._id
         }
     })
 }
