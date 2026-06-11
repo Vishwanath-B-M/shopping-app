@@ -1,25 +1,42 @@
 
 import {useDispatch, useSelector} from 'react-redux'
 import { addTocart ,removeFromcart} from '../../store/slice/cartslice'
+import { useState } from 'react'
 
 
 export default function ProductTile({product}){
-
+const [message,setmessage]=useState();
 const dispatch=useDispatch()
 const cart =useSelector(state=>state.cart.cart)
 
 
-     function HandleAddtoCart(){
-    dispatch(addTocart(product))
+async  function HandleAddtoCart(){
+   const res=await fetch("http://localhost:3000/api/cart/cart",{
+    method:"POST",
+    headers:{
+    "content-type":"application/json"
+    },
+    credentials:"include",
+    body:JSON.stringify({
+      productId:product.id,
+      quantity:"1",
+      Price:product.price
+    })
+   })
+   const data=await res.json()
+   console.log(data)
+   setmessage(data.message)
+   if(data.product){
+    dispatch(addTocart(data.product))
     console.log( product)
+   }
      }
     function RemoveHandle(){
       dispatch(removeFromcart(product.id))
       console.log( product.id);
 
     }
-   const isitem= cart.some(item=>item.id===product.id)
-
+    const isitem=cart.some(item=>item&&item.id===product.id)
 
     return(<div>
       <div className="flex flex-col max-h-[400px] w-full items-center justify-between 
@@ -34,6 +51,7 @@ hover:scale-105 transition-transform duration-500 overflow-hidden">
 
   <h1 className="w-40 truncate text-gray-700 font-bold text-lg text-center">
     {product.title}
+    <p>{message}</p>
   </h1>
 
   <h4 className="text-gray-600 text-sm">

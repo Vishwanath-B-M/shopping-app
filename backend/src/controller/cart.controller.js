@@ -12,10 +12,12 @@ console.log(productId, quantity, Price);
         }else{
             finduser.cartitems.push({productId,quantity:Number(quantity),Price:Number(Price)})
         }
-    
+    await finduser.save();
     return res.status(200).json({
         message:"successully added to cart",
-        cart:finduser
+        cart:[{
+            user:finduser._id,
+        },finduser]
     })
 }else{
     const newcart=await cartmodel.create({
@@ -26,9 +28,12 @@ console.log(productId, quantity, Price);
         Price:Number(Price)
     }]
     })
+    await newcart.save();
     return res.status(200).json({
         message:'succefully added to cart',
-        cart:newcart
+        cart:[{
+            user:newcart._id,   
+        },newcart]
     })
 }}catch(error){
     console.log(error)
@@ -38,4 +43,18 @@ console.log(productId, quantity, Price);
 
 }
 }
-module.exports={cart}
+async function cartshow(req,res) {
+    const {userId}=req.body
+    const cart=await cartmodel.findOne({userId})
+    if(!cart){
+        return res.status(403).json({
+            message:"you need to login or singup"
+        })
+    }
+
+    res.status(200).json({
+        message:"cart",
+        cart:cart
+    })   
+}
+module.exports={cart,cartshow}
