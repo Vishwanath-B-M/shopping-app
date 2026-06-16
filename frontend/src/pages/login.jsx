@@ -61,6 +61,7 @@ export default function Login(){
             if(res.status===201){
                 setmessage(data.message)
                 dispatch(loginSuceess(data.token))
+                console.log("dispatched");
                 setemail("")
                 setpassword("")
                 setConfirmPassword("")

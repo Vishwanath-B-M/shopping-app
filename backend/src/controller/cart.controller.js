@@ -1,7 +1,7 @@
 const cartmodel=require("../models/usercart.model")
 async function cart(req,res) {
-    const userId=req.user_id
-    const {productId,quantity,Price}=req.body
+    const userId=req.userId
+    const {productId,quantity,Price,Image}=req.body
     console.log(req.body);
 console.log(productId, quantity, Price);
     const finduser=await cartmodel.findOne({user:userId})
@@ -10,7 +10,10 @@ console.log(productId, quantity, Price);
         if(itemindex>-1){
             finduser.cartitems[itemindex].quantity+=Number(quantity)
         }else{
-            finduser.cartitems.push({productId,quantity:Number(quantity),Price:Number(Price)})
+            finduser.cartitems.push({productId,
+                quantity:Number(quantity),
+                Price:Number(Price),
+                Image})
         }
     await finduser.save();
     return res.status(200).json({
@@ -25,7 +28,8 @@ console.log(productId, quantity, Price);
         cartitems:[{
         productId,
         quantity:Number(quantity),
-        Price:Number(Price)
+        Price:Number(Price),
+        Image
     }]
     })
     await newcart.save();
@@ -44,17 +48,21 @@ console.log(productId, quantity, Price);
 }
 }
 async function cartshow(req,res) {
-    const {userId}=req.body
-    const cart=await cartmodel.findOne({userId})
-    if(!cart){
+    const userId=req.userId
+    
+    try{
+        const cart=await cartmodel.findOne({user:userId})
+        if(cart){
         return res.status(403).json({
-            message:"you need to login or singup"
-        })
-    }
-
-    res.status(200).json({
-        message:"cart",
+            message:"cart",
         cart:cart
-    })   
+        })
+    }}catch(error){
+        console.log(error)
+        return res.status(200).json({
+            message:"you need to login or singup"
+        
+    }) 
+}  
 }
 module.exports={cart,cartshow}

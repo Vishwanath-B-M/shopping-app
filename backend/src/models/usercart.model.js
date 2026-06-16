@@ -8,18 +8,21 @@ const cart=new mongoose.Schema({
     },
     cartitems:[{
         productId:{
-            type:String,
+            type:Number,
             required:true
         },
         quantity:{
-                type:String,
+                type:Number,
                 required:true,
                 min:1
        },
        Price:{
         type:Number,
         required:true
-       }
+       },
+       Image:[{
+        type:String
+       }]
 
 
     }]

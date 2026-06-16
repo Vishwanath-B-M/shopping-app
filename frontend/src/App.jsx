@@ -7,7 +7,6 @@ import Login from './pages/login'
 import Category from './pages/category'
 import './App.css'
 import CategoryCard from './pages/singlecategory'
-import ProtectedRoute from './component/protectionTile/protection'
 
 function App() {
   
@@ -21,7 +20,7 @@ function App() {
     <Routes>
       <Route exact path='/' element={<Home/> }/>
       <Route  path='/category' element={<Category/>}/>
-      <Route path='/cart' element={<ProtectedRoute> <Cart/> </ProtectedRoute>}/>
+      <Route path='/cart' element={ <Cart/> }/>
       <Route path='/login' element={<Login/>}/>
       <Route path='/singlecategory/:slug' element={<CategoryCard/>}/>
     </Routes>

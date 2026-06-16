@@ -7,9 +7,8 @@ import { useState } from 'react'
 export default function ProductTile({product}){
 const [message,setmessage]=useState();
 const dispatch=useDispatch()
-const cart =useSelector(state=>state.cart.cart)
-
-
+const items=useSelector(state=>state.cart.cart)
+console.log(items)
 async  function HandleAddtoCart(){
    const res=await fetch("http://localhost:3000/api/cart/cart",{
     method:"POST",
@@ -20,23 +19,23 @@ async  function HandleAddtoCart(){
     body:JSON.stringify({
       productId:product.id,
       quantity:"1",
-      Price:product.price
+      Price:product.price,
+      Image:product.images
     })
-   })
+  })
    const data=await res.json()
    console.log(data)
    setmessage(data.message)
-   if(data.product){
-    dispatch(addTocart(data.product))
+   const cartItems = data.cart[1].cartitems;
+    dispatch(addTocart(cartItems))
     console.log( product)
    }
-     }
-    function RemoveHandle(){
-      dispatch(removeFromcart(product.id))
-      console.log( product.id);
+function RemoveHandle() {
+  console.log("Removing:", product.id);
+  dispatch(removeFromcart(product.id))
+}
+const isitem=items.some(cartitems=>cartitems?.productId===product?.id)
 
-    }
-    const isitem=cart.some(item=>item&&item.id===product.id)
 
     return(<div>
       <div className="flex flex-col max-h-[400px] w-full items-center justify-between 
@@ -64,8 +63,13 @@ hover:scale-105 transition-transform duration-500 overflow-hidden">
 
   <div className="w-full flex justify-center px-2 pb-2">
     <button 
-      onClick={() => isitem ? RemoveHandle() : HandleAddtoCart()}
-      className="w-full lg:w-1/2 h-10 text-sm bg-white border rounded-xl shadow 
+      onClick={() =>{
+         if(isitem) {
+         RemoveHandle()
+      }else{
+        HandleAddtoCart()
+      }
+    }}className="w-full lg:w-1/2 h-10 text-sm bg-white border rounded-xl shadow 
       hover:scale-105 transition">
       
       {isitem ? "Remove from cart" : "Add to cart"}
@@ -73,8 +77,6 @@ hover:scale-105 transition-transform duration-500 overflow-hidden">
   </div>
 
 </div>
-      
-
-
       </div>)
- }
+      }
+ 
