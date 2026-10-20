@@ -14,7 +14,7 @@ export default function Login(){
     const dispatch=useDispatch()
     const navigate=useNavigate()
      async function FetchLogin() {
-     const res=await fetch("http://localhost:3000/api/auth/login",{
+     const res=await fetch("https://shopping-app-4-3bid.onrender.com/api/auth/login",{
                 method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -44,7 +44,7 @@ export default function Login(){
         }
     };
     async function signup(){
-        const res=await fetch("http://localhost:3000/api/auth/singup",{
+        const res=await fetch("https://shopping-app-4-3bid.onrender.com/api/auth/singup",{
             method:"post",
             headers:{
                 "content-type":"application/json",

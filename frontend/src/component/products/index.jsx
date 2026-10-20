@@ -10,7 +10,7 @@ const dispatch=useDispatch()
 const items=useSelector(state=>state.cart.cart)
 console.log(items)
 async  function HandleAddtoCart(){
-   const res=await fetch("http://localhost:3000/api/cart/cart",{
+   const res=await fetch("https://shopping-app-4-3bid.onrender.com/api/cart/cart",{
     method:"POST",
     headers:{
     "content-type":"application/json"
@@ -33,7 +33,7 @@ async  function HandleAddtoCart(){
    
 async function RemoveHandle() {
   try {
-      const res = await fetch("http://localhost:3000/api/cart/cartdelete", {
+      const res = await fetch("https://shopping-app-4-3bid.onrender.com/api/cart/cartdelete", {
           method: "DELETE",
           headers: {
               "Content-Type": "application/json"

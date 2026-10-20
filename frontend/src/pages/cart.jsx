@@ -9,7 +9,7 @@ useEffect(()=>{
   async function cartshowing() {
    try{
 
-   const res=await fetch("http://localhost:3000/api/cart/cartshow",{
+   const res=await fetch("https://shopping-app-4-3bid.onrender.com/api/cart/cartshow",{
         method:"GET",
         credentials:"include"
     })

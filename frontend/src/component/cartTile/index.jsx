@@ -11,7 +11,7 @@ export default function CartTile({ cartitem }) {
   async function RemoveHandle() {
     try {
       const res = await fetch(
-        'http://localhost:3000/api/cart/cartdelete',
+        'https://shopping-app-4-3bid.onrender.com/api/cart/cartdelete',
         {
           method: 'DELETE',
           headers: {
@@ -33,9 +33,8 @@ export default function CartTile({ cartitem }) {
       }
 
       setmessage(data.message || 'Item removed successfully');
-
-      // Update the Redux store after successful deletion
       dispatch(removeFromcart(cartitem.productId));
+
     } catch (error) {
       console.error(error);
       setmessage('Something went wrong');
@@ -69,7 +68,6 @@ export default function CartTile({ cartitem }) {
 
         <div>
           <p className="text-sm">{message}</p>
-
           <button
             onClick={RemoveHandle}
             className="w-full h-10 text-sm border bg-white shadow-xl rounded-xl hover:scale-105 p-2 transition m-2"

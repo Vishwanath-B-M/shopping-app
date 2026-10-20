@@ -13,7 +13,7 @@ export default function Header(){
     const [message,setmessage]=useState()
 
  async function HandleLogout(){
-     const res= await fetch("http://localhost:3000/api/auth/logout",{
+     const res= await fetch("https://shopping-app-4-3bid.onrender.com/api/auth/logout",{
         credentials:'include'
      })
      const data=await res.json()

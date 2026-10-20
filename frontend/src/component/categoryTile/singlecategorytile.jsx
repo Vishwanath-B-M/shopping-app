@@ -7,7 +7,7 @@ export default function SingleCate({product}){
   const cart=useSelector(state=>state.cart.cart)
   const [message,setmessage]=useState()
 async function HandleAddtoCart(){
-    const res=await fetch("http://localhost:3000/api/cart/cart",{
+    const res=await fetch("https://shopping-app-4-3bid.onrender.com/api/cart/cart",{
       method:"POST",
       headers:{
       "content-type":"application/json"
@@ -28,7 +28,7 @@ async function HandleAddtoCart(){
       console.log( product)
   }
   async function RemoveFromCart(){
-    const res=await fetch("http://localhost:3000/api/cart/cartdelete",{
+    const res=await fetch("https://shopping-app-4-3bid.onrender.com/api/cart/cartdelete",{
       method:"DELETE",
       headers:{
         "content-type":"application/json"
