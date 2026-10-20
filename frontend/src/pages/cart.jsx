@@ -7,7 +7,9 @@ export default function Cart(){
     const [cart,setcart]=useState([])
 useEffect(()=>{  
   async function cartshowing() {
-    const res=await fetch("http://localhost:3000/api/cart/cartshow",{
+   try{
+
+   const res=await fetch("http://localhost:3000/api/cart/cartshow",{
         method:"GET",
         credentials:"include"
     })
@@ -17,14 +19,17 @@ useEffect(()=>{
     setcart(cart)
     const totalprice=cart.reduce((sum ,item)=> sum+item.Price*item.quantity,0)
     settotalPrice(totalprice)
-    
+  }catch(error){
+    console.log(error)
+    setmessage(error.message)
+  }
     }
      cartshowing() ;}
     ,[])
    return(< div className="min-h-screen bg-gradient-to-r from-blue-300 to-purple-300">
     <div  className='flex flex-col items-center justify-center ' >
        {cart.length?(<div className='min-h-screen flex flex-col items-center justify-center'>
-            {cart.map((cartitem=>(<CartTile key={cartitem.id} cartitem={cartitem} />)))}
+            {cart.map((cartitem=>(<CartTile key={cartitem._id || cartitem.id} cartitem={cartitem} />)))}
            <h1 className='text-2xl lg:text-4xl'> your cart summary</h1>
              <p >  
               <span className='text-2xl lg:text-4xl'> total item: <span> {cart.length}</span> </span><br></br>

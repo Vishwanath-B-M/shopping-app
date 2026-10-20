@@ -2,10 +2,9 @@ const cartmodel=require("../models/usercart.model")
 async function cart(req,res) {
     const userId=req.userId
     const {productId,quantity,Price,Image}=req.body
-    console.log(req.body);
-console.log(productId, quantity, Price);
     const finduser=await cartmodel.findOne({user:userId})
-   try{ if(finduser){
+   try{ 
+    if(finduser){
         const itemindex=finduser.cartitems.findIndex(cartitems=>cartitems.productId===productId)
         if(itemindex>-1){
             finduser.cartitems[itemindex].quantity+=Number(quantity)
@@ -65,4 +64,47 @@ async function cartshow(req,res) {
     }) 
 }  
 }
-module.exports={cart,cartshow}
+
+async function cartdelete(req, res) {
+    const userId = req.userId;
+    const { productId } = req.body;
+
+    try {
+        const cart = await cartmodel.findOne({ user: userId });
+
+        if (!cart) {
+            return res.status(404).json({
+                message: "Cart not found"
+            });
+        }
+
+        const itemindex = cart.cartitems.findIndex(
+            cartitem => String(cartitem.productId) === String(productId)
+        );
+
+        if (itemindex === -1) {
+            return res.status(404).json({
+                message: "Item not found in cart",
+                productId: productId
+            });
+        }
+
+        cart.cartitems.splice(itemindex, 1);
+
+        await cart.save();
+
+        return res.status(200).json({
+            message: "Successfully deleted from cart",
+            cart: cart
+        });
+
+    } catch (error) {
+        console.log(error);
+
+        return res.status(500).json({
+            message: "Server error"
+        });
+    }
+}
+
+module.exports={cart,cartshow,cartdelete}

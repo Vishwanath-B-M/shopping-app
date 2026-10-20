@@ -30,9 +30,34 @@ async  function HandleAddtoCart(){
     dispatch(addTocart(cartItems))
     console.log( product)
    }
-function RemoveHandle() {
-  console.log("Removing:", product.id);
-  dispatch(removeFromcart(product.id))
+   
+async function RemoveHandle() {
+  try {
+      const res = await fetch("http://localhost:3000/api/cart/cartdelete", {
+          method: "DELETE",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          credentials: "include",
+          body: JSON.stringify({
+              productId: product.id
+          })
+      });
+
+      const data = await res.json();
+      console.log(data);
+      setmessage(data.message);
+
+      if (res.ok) {
+          const cartItems = data.cart.cartitems;
+          console.log(cartItems);
+
+          dispatch(removeFromcart(product.id));
+      }
+  } catch (error) {
+      console.error(error);
+      setmessage("Failed to remove product");
+  }
 }
 const isitem=items.some(cartitems=>cartitems?.productId===product?.id)
 

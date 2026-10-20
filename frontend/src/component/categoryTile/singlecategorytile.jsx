@@ -27,7 +27,20 @@ async function HandleAddtoCart(){
       dispatch(addTocart(cartItems))
       console.log( product)
   }
-  function RemoveFromCart(){
+  async function RemoveFromCart(){
+    const res=await fetch("http://localhost:3000/api/cart/cartdelete",{
+      method:"DELETE",
+      headers:{
+        "content-type":"application/json"
+      },
+      credentials:"include",
+      body:JSON.stringify({
+        productId:product.id
+       }),
+    })
+    const data=await res.json()
+    console.log(data)
+    setmessage(data.message)
     dispatch(removeFromcart(product.id))
   }
   const isitem=cart.some(cartitems=>cartitems?.productId===product?.id)
