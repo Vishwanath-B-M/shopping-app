@@ -6,3 +6,6 @@ connectiondb()
 app.listen(3000,()=>{
     console.log('server is running in port number 3000')
 })
+app.get("/", (req, res) => {
+    res.send("Shopping backend is running successfully!");
+});
