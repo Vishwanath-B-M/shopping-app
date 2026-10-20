@@ -6,9 +6,15 @@ const cartrouter=require("./routers/cart.router")
 const app=express()
 app.use(express.json())
 app.use(cookieparser())
+const allowedOrigins = [
+    "https://shopping-app-4.vercel.app",
+    "https://shopping-app-4-git-main-t9b66k7jyg-1959s-projects.vercel.app"
+  ];
 app.use(cors({
-    origin: "http://localhost:5173",
-    credentials: true
+    origin: allowedOrigins,
+    credentials: true,
+    methods:["GET","POST","PUT","DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
 }))
 app.use("/api/auth",authrouter)
 app.use("/api/cart",cartrouter)
