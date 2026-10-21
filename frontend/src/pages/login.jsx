@@ -42,7 +42,7 @@ export default function Login() {
       }
 
       setmessage(data.message || "Login successful");
-      dispatch(loginSuceess(data.token));
+      dispatch(loginSuceess("logged-in"));
 
       setemail("");
       setpassword("");
@@ -97,7 +97,7 @@ export default function Login() {
       setmessage(data.message || "Signup successful");
 
       if (data.token) {
-        dispatch(loginSuceess(data.token));
+        dispatch(loginSuceess("logged-in"));
       }
 
       setemail("");

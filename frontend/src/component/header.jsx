@@ -12,16 +12,30 @@ export default function Header(){
     const token =useSelector((state)=>state.auto.token)
     const [message,setmessage]=useState()
 
- async function HandleLogout(){
-     const res= await fetch("https://shopping-app-4-3bid.onrender.com/api/auth/logout",{
-        credentials:'include'
-     })
-     const data=await res.json()
-     setmessage(data.message)
-    dispatch(logout(data.token))
-     Navigate('/login')
-
-   }
+    async function HandleLogout() {
+        try {
+          const res = await fetch(
+            "https://shopping-app-4-3bid.onrender.com/api/auth/logout",
+            {
+              method: "GET", // Use the method your backend logout route expects.
+              credentials: "include",
+            }
+          );
+      
+          const data = await res.json();
+      
+          if (!res.ok) {
+            setmessage(data.message || "Logout failed");
+            return;
+          }
+      
+          dispatch(logout());
+          Navigate("/login");
+        } catch (error) {
+          console.error("Logout error:", error);
+          setmessage("Unable to connect to the server");
+        }
+      }
    
     return(<div className="w-full bg-gradient-to-r from-blue-300 to-purple-300">
         <div>
