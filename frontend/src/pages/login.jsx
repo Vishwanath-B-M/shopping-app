@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginSuceess } from "../store/autoslice/auto";
+import { apiFetch } from "../utils/api";
 
 export default function Login() {
   const [login, setlogin] = useState(true);
@@ -16,22 +17,17 @@ export default function Login() {
 
   async function FetchLogin() {
     try {
-      setmessage("Logging in...");
+      if (!email || !password) {
+        setmessage("Please enter email and password");
+        return;
+      }
 
-      const res = await fetch(
-        "https://shopping-app-4-3bid.onrender.com/api/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        }
-      );
+      setmessage("Logging in... (the server may take ~30s to wake up)");
+
+      const res = await apiFetch("/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      });
 
       const data = await res.json();
       console.log("Login response:", res.status, data);
@@ -41,12 +37,17 @@ export default function Login() {
         return;
       }
 
+      if (!data.token) {
+        setmessage("Login failed: server did not send a token");
+        return;
+      }
+
+      // save the REAL token, so the navbar changes and API calls are authorised
+      dispatch(loginSuceess(data.token));
       setmessage(data.message || "Login successful");
-      dispatch(loginSuceess("logged-in"));
 
       setemail("");
       setpassword("");
-
       navigate("/");
     } catch (error) {
       console.error("Login error:", error);
@@ -66,25 +67,12 @@ export default function Login() {
         return;
       }
 
-      setmessage("Signing up...");
+      setmessage("Signing up... (the server may take ~30s to wake up)");
 
-      console.log("Signup clicked");
-
-      const res = await fetch(
-        "https://shopping-app-4-3bid.onrender.com/api/auth/singup",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            email,
-            password,
-            confirmPassword,
-          }),
-        }
-      );
+      const res = await apiFetch("/api/auth/singup", {
+        method: "POST",
+        body: JSON.stringify({ email, password, confirmPassword }),
+      });
 
       const data = await res.json();
       console.log("Signup response:", res.status, data);
@@ -94,16 +82,18 @@ export default function Login() {
         return;
       }
 
-      setmessage(data.message || "Signup successful");
-
-      if (data.token) {
-        dispatch(loginSuceess("logged-in"));
+      if (!data.token) {
+        setmessage("Signup worked, please login");
+        setlogin(true);
+        return;
       }
+
+      dispatch(loginSuceess(data.token));
+      setmessage(data.message || "Signup successful");
 
       setemail("");
       setpassword("");
       setConfirmPassword("");
-
       navigate("/");
     } catch (error) {
       console.error("Signup error:", error);
@@ -156,10 +146,7 @@ export default function Login() {
               className="w-64 h-10 mt-2 lg:w-96 lg:h-16 border-2 p-2 lg:mt-4 lg:text-3xl text-xl rounded-2xl"
             />
 
-            <Link
-              to="/forgot-password"
-              className="lg:text-3xl m-2 hover:text-3xl"
-            >
+            <Link to="/forgot-password" className="lg:text-3xl m-2 hover:text-3xl">
               forgot password?
             </Link>
 

@@ -1,8 +1,11 @@
-const express=require('express')
-const cartController=require("../controller/cart.controller")
-const authmoddileware=require("../middlewares/auth.middleware")
-const router=express.Router()
-router.post("/cart",authmoddileware.userCheck,cartController.cart)
-router.get("/cartshow",authmoddileware.userCheck,cartController.cartshow)
-router.delete("/cartdelete",authmoddileware.userCheck,cartController.cartdelete)
-module.exports=router
+const express = require('express')
+const cartController = require('../controller/cart.controller')
+const authmiddleware = require('../middlewares/auth.middleware')
+
+const router = express.Router()
+
+router.post('/cart', authmiddleware.userCheck, cartController.cart)
+router.get('/cartshow', authmiddleware.userCheck, cartController.cartshow)
+router.delete('/cartdelete', authmiddleware.userCheck, cartController.cartdelete)
+
+module.exports = router
